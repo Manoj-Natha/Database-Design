@@ -1,0 +1,35 @@
+
+
+
+create or replace procedure findSalaryType(x IN number, Y OUT varchar(15)) AS
+BEGIN
+   IF x < 40,000 THEN
+      y:= 'LOW';
+   ElSIF x < 60,000 THEN
+      y:= 'MEDIUM';
+   ELSE 
+	  y:= 'HIGH';
+   END IF;
+END;
+
+
+set serveroutput on
+DECLARE
+thisEmployee EMPLOYEE%ROWTYPE;
+y Employee_Salaries.Salary%TYPE; 
+CURSOR AllEmployee IS
+SELECT * FROM EMPLOYEE;
+BEGIN
+OPEN AllEmployee;
+LOOP
+FETCH AllEmployee INTO thisEmployee;
+EXIT WHEN (AllEmployee%NOTFOUND);
+findSalaryType(thisEmployee.Salary,y);
+INSERT INTO Employee_Salaries VALUES(thisEmployee.SSN,Y);
+END LOOP;
+CLOSE AllEmployee;
+END;
+.
+RUN;
+
+

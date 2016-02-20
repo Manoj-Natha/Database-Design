@@ -1,0 +1,73 @@
+CREATE TABLE BOOK
+(Book_id VARCHAR(10),
+Title VARCHAR(15),
+Publisher_name VARCHAR(15),
+PRIMARY KEY(Book_id));
+
+CREATE TABLE BOOK_AUTHORS
+(Book_id VARCHAR(10),
+Author_name VARCHAR(15),
+PRIMARY KEY(Book_id, Author_name),
+CONSTRAINT FKBIDBA FOREIGN KEY (Book_id) REFERENCES BOOK(Book_id));
+
+CREATE TABLE PUBLISHER
+(Name VARCHAR(15) PRIMARY KEY,
+Address VARCHAR(20),
+Phone INT);
+
+CREATE TABLE BOOK_COPIES
+(Book_id VARCHAR(10),
+Branch_id VARCHAR(10),
+No_of_copies INT,
+PRIMARY KEY(Book_id,Branch_id),
+CONSTRAINT FKBIDBC FOREIGN KEY (Book_id) REFERENCES BOOK(Book_id));
+
+
+CREATE TABLE BOOK_LOANS
+(Book_id VARCHAR(10),
+Branch_id VARCHAR(10),
+Card_no INT,
+Date_out DATE,
+Due_date DATE,
+Return_date DATE DEFAULT NULL,
+PRIMARY KEY(Book_id,Branch_id,Card_no),
+CONSTRAINT FKBIDBL FOREIGN KEY (Book_id) REFERENCES BOOK(Book_id));
+
+CREATE TABLE LIBRARY_BRANCH
+(Branch_id VARCHAR(10) PRIMARY KEY,
+Branch_name VARCHAR(15),
+Address VARCHAR(20));
+
+CREATE TABLE BORROWER
+(Card_no INT PRIMARY KEY,
+Name VARCHAR(15),
+Address VARCHAR(20),
+Phone INT);
+
+ALTER TABLE BOOK
+ADD CONSTRAINT FKPNBK
+FOREIGN KEY (Publisher_name) 
+REFERENCES PUBLISHER(Name);
+
+ALTER TABLE BOOK_COPIES
+ADD CONSTRAINT FKBRIDBC
+FOREIGN KEY (Branch_id) 
+REFERENCES LIBRARY_BRANCH(Branch_id);
+
+ALTER TABLE BOOK_LOANS
+ADD CONSTRAINT FKBRIDBL
+FOREIGN KEY (Branch_id) 
+REFERENCES LIBRARY_BRANCH(Branch_id);
+
+ALTER TABLE BOOK_LOANS
+ADD CONSTRAINT FKCNBL
+FOREIGN KEY (Card_no) 
+REFERENCES BORROWER(Card_no);
+
+drop table book_authors;
+drop table book_copies;
+drop table book_loans;
+drop table library_branch;
+drop table borrower;
+drop table book;
+drop table publisher;
